@@ -12,8 +12,51 @@
     tools:context="maderski.markparkingspot.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Location"
+        android:id="@+id/getLocationButton"
+        android:onClick="getCurrentLocationButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drop Pin in Maps"
+        android:id="@+id/dropPinButton"
+        android:onClick="dropPinInMapsButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/getLocationButton"
+        android:layout_marginBottom="93dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Latitude"
+        android:id="@+id/latitudeText"
+        android:layout_marginTop="67dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/longitudeText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Longitude"
+        android:id="@+id/longitudeText"
+        android:layout_below="@+id/latitudeText"
+        android:layout_alignEnd="@+id/getLocationButton"
+        android:layout_marginTop="29dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Stored Location:"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
