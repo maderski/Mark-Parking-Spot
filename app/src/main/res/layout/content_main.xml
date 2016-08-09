@@ -20,7 +20,10 @@
         android:onClick="getCurrentLocationButton"
         android:layout_below="@+id/longitudeText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="112dp" />
+        android:layout_marginTop="112dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,7 +33,10 @@
         android:onClick="dropPinInMapsButton"
         android:layout_below="@+id/getLocationButton"
         android:layout_alignStart="@+id/textView"
-        android:layout_marginTop="46dp" />
+        android:layout_marginTop="46dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button" />
 
     <TextView
         android:layout_width="wrap_content"
