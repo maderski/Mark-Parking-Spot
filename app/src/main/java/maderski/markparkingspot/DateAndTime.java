@@ -33,7 +33,7 @@ public class DateAndTime {
 
     //Return the current date as a String
     public String getCurrentDate(){
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int year = calendar.get(Calendar.YEAR);
 
