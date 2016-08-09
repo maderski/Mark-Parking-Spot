@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        MPSNotification notification = new MPSNotification();
+        notification.createMessage(this);
+        finish();
     }
 
     @Override
