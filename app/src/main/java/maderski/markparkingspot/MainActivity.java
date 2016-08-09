@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkLocationPermission();
-        setLocationText();
+        setLocationTimeDateText();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -96,17 +96,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getCurrentLocationButton(View view){
+        //Get current location and store it in MPSPreferences
         CurrentLocation currentLocation = new CurrentLocation(this);
         MPSPreferences.setLatitude(this, currentLocation.getLatitude());
         MPSPreferences.setLongitude(this, currentLocation.getLongitude());
-        setLocationText();
+
+        //Get current time and date and store it in MPSPreferences
+        DateAndTime dateAndTime = new DateAndTime();
+        MPSPreferences.setCurrentDate(this, dateAndTime.getCurrentDate());
+        MPSPreferences.setCurrentTime(this, dateAndTime.getCurrentTime());
+
+        //Set the UI text to the recently stored values
+        setLocationTimeDateText();
     }
 
-    private void setLocationText(){
+    private void setLocationTimeDateText(){
+        //Set Lat and Long text
         TextView textView = (TextView)findViewById(R.id.latitudeText);
         textView.setText(MPSPreferences.getLatitude(this));
         textView = (TextView) findViewById(R.id.longitudeText);
         textView.setText(MPSPreferences.getLongitude(this));
+
+        //Set Time and Date text
+        textView = (TextView) findViewById(R.id.timeText);
+        textView.setText(MPSPreferences.getCurrentTime(this));
+        textView = (TextView) findViewById(R.id.dateText);
+        textView.setText(MPSPreferences.getCurrentDate(this));
     }
 
     public void dropPinInMapsButton(View view){

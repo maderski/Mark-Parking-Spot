@@ -13,6 +13,8 @@ public class MPSPreferences {
 
     private static final String LATITUDE_KEY = "MyLatitudeKey";
     private static final String LONGITUDE_KEY = "LongitudeKey";
+    private static final String CURRENT_TIME_KEY = "CurrentTimeKey";
+    private static final String CURRENT_DATE_KEY = "CurrentDateKey";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -53,5 +55,23 @@ public class MPSPreferences {
 
     public static String getLongitude(Context context){
         return reader(context).getString(LONGITUDE_KEY, "-81.2989");
+    }
+
+    public static void setCurrentTime(Context context, String time){
+        editor(context).putString(CURRENT_TIME_KEY, time);
+        commit(context);
+    }
+
+    public static String getCurrentTime(Context context){
+        return reader(context).getString(CURRENT_TIME_KEY, "0:00 AM");
+    }
+
+    public static void setCurrentDate(Context context, String date){
+        editor(context).putString(CURRENT_DATE_KEY, date);
+        commit(context);
+    }
+
+    public static String getCurrentDate(Context context){
+        return reader(context).getString(CURRENT_DATE_KEY, "1-1-2000");
     }
 }
