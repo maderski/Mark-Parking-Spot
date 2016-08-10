@@ -13,6 +13,7 @@ public class MPSPreferences {
 
     private static final String LATITUDE_KEY = "MyLatitudeKey";
     private static final String LONGITUDE_KEY = "LongitudeKey";
+    private static final String ACCURACY_KEY = "AccuracyKey";
     private static final String CURRENT_TIME_KEY = "CurrentTimeKey";
     private static final String CURRENT_DATE_KEY = "CurrentDateKey";
 
@@ -55,6 +56,15 @@ public class MPSPreferences {
 
     public static String getLongitude(Context context){
         return reader(context).getString(LONGITUDE_KEY, "-81.2989");
+    }
+
+    public static void setAccuracy(Context context, String accuracy){
+        editor(context).putString(ACCURACY_KEY, accuracy);
+        commit(context);
+    }
+
+    public static String getAccuracy(Context context){
+        return reader(context).getString(ACCURACY_KEY, "Unknown");
     }
 
     public static void setCurrentTime(Context context, String time){

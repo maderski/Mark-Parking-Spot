@@ -24,10 +24,11 @@ public class MPSNotification {
         String pinLabel = "Parking Spot";
         String latitude = MPSPreferences.getLatitude(context);
         String longitude = MPSPreferences.getLongitude(context);
+        String accuracy = MPSPreferences.getAccuracy(context);
 
-        String title = "Parking location captured!";
-        String message = "Time: " + MPSPreferences.getCurrentTime(context) +
-                " Date: " + MPSPreferences.getCurrentDate(context);
+        String title = "Captured! w/Accuracy: " + accuracy + "m";
+        String message = "at " + MPSPreferences.getCurrentTime(context) +
+                " on " + MPSPreferences.getCurrentDate(context);
 
 //        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 //                new Intent(context, Options.class), PendingIntent.FLAG_UPDATE_CURRENT);

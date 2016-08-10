@@ -36,15 +36,14 @@ public class CurrentLocation {
     }
     //Return Latitude as a String
     public String getLatitude(){
+        String latitude = "28.4158";
         try {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                return Double.toString(location.getLatitude());
-            else
-                return "28.4158";
+                latitude = Double.toString(location.getLatitude());
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
-        return "28.4158";
+        return latitude;
     }
 
     public String getLatitudeAvg(int numberOfReadings){
@@ -73,15 +72,26 @@ public class CurrentLocation {
 
     //Return Longitude as a String
     public String getLongitude(){
+        String longitude = "-81.2989";
         try {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                return Double.toString(location.getLongitude());
-            else
-                return "-81.2989";
+                longitude = Double.toString(location.getLongitude());
         }catch(Exception e){
             Log.e(TAG, e.getMessage());
         }
-        return "-81.2989";
+        return longitude;
+    }
+
+    public String getAccuracy(){
+        String Accuracy = "unknown";
+
+        try{
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                Accuracy = Float.toString(location.getAccuracy());
+            }
+        }catch (Exception e){ e.printStackTrace(); }
+
+        return Accuracy;
     }
 
     public String getLongitudeAvg(int numberOfReadings){
