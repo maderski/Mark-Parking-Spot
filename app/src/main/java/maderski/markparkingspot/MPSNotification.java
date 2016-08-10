@@ -24,16 +24,13 @@ public class MPSNotification {
         String pinLabel = "Parking Spot";
         String latitude = MPSPreferences.getLatitude(context);
         String longitude = MPSPreferences.getLongitude(context);
-        String latitudeShort = shortenString(latitude, 5);
-        String longitudeShort = shortenString(longitude, 5);
 
-        String title = "Location: " + latitudeShort + ", " +
-                longitudeShort;
+        String title = "Parking location captured!";
         String message = "Time: " + MPSPreferences.getCurrentTime(context) +
                 " Date: " + MPSPreferences.getCurrentDate(context);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, Options.class), PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+//                new Intent(context, Options.class), PendingIntent.FLAG_UPDATE_CURRENT);
         Intent dropPinIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("geo:0,0?q="+ latitude+","+ longitude+"("+ pinLabel+")"));
         dropPinIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -45,13 +42,13 @@ public class MPSNotification {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(OptionsPreferences.getAutoCancel(context))
-                .setOngoing(OptionsPreferences.getOngoing(context))
+                .setAutoCancel(true)
+                .setOngoing(false)
                 .setContentIntent(mapIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .addAction(android.R.drawable.ic_menu_edit, "Options", contentIntent);
+                .setDefaults(Notification.DEFAULT_VIBRATE);
+//                .addAction(android.R.drawable.ic_menu_edit, "Options", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
     }
 

@@ -17,8 +17,13 @@ public class DateAndTime {
             hour -= 12;
         }
 
+        String minuteStr = Integer.toString(minute);
+        if(minute < 10){
+            minuteStr = "0"+ minuteStr;
+        }
+
         return Integer.toString(hour) + ":" +
-                Integer.toString(minute) + getIfAMOrPM();
+                minuteStr + getIfAMOrPM();
     }
 
     //Check to see if it AM or PM and return the correct one

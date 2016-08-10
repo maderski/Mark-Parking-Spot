@@ -60,23 +60,6 @@ public class MainActivity extends Activity {
         return version;
     }
 
-    public void getCurrentLocationButton(View view){
-        //Gets current Location, Time and Date
-        getCurrentLocationTimeDate();
-
-        //Set the UI text to the recently stored values
-
-    }
-
-    public void dropPinInMapsButton(View view){
-        String latitude = MPSPreferences.getLatitude(this);
-        String longitude = MPSPreferences.getLongitude(this);
-        String labelName = "Parking Spot";
-
-        dropPinInMaps(latitude, longitude, labelName);
-
-    }
-
     private void dropPinInMaps(String latitude, String longitude, String labelName){
         Intent dropPinIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="+latitude+","+longitude+"("+labelName+")"));
         startActivity(dropPinIntent);
@@ -85,8 +68,8 @@ public class MainActivity extends Activity {
     private void getCurrentLocationTimeDate(){
         //Get current location and store it in MPSPreferences
         CurrentLocation currentLocation = new CurrentLocation(this);
-        MPSPreferences.setLatitude(this, currentLocation.getLatitude());
-        MPSPreferences.setLongitude(this, currentLocation.getLongitude());
+        MPSPreferences.setLatitude(this, currentLocation.getLatitudeAvg(3));
+        MPSPreferences.setLongitude(this, currentLocation.getLongitudeAvg(3));
 
         //Get current time and date and store it in MPSPreferences
         DateAndTime dateAndTime = new DateAndTime();
