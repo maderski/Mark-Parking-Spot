@@ -19,7 +19,6 @@ public class CurrentLocation {
 
     //Get course location
     public CurrentLocation(Context context){
-
         //Get Permission
         PackageManager packageManager = context.getPackageManager();
         int hasPermission = packageManager.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION,
@@ -34,6 +33,11 @@ public class CurrentLocation {
             Toast.makeText(context, "Need GPS Permission!", Toast.LENGTH_LONG).show();
         }
     }
+
+    public boolean isGPSEnabled(){
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
     //Return Latitude as a String
     public String getLatitude(){
         String latitude = "28.4158";

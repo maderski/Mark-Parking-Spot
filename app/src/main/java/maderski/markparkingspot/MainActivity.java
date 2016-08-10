@@ -40,10 +40,27 @@ public class MainActivity extends Activity {
     }
 
     private void performActions(){
-        getCurrentLocationTimeDate();
+        CurrentLocation currentLocation = new CurrentLocation(this);
+        if(currentLocation.isGPSEnabled()) {
+            getCurrentLocationTimeDate(currentLocation);
 
-        MPSNotification notification = new MPSNotification();
-        notification.createMessage(this);
+            MPSNotification notification = new MPSNotification();
+            notification.createMessage(this);
+        }else{
+            Toast.makeText(this, "The GPS is currently disabled!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getCurrentLocationTimeDate(CurrentLocation currentLocation){
+        //Get current location and store it in MPSPreferences
+        MPSPreferences.setLatitude(this, currentLocation.getLatitude());
+        MPSPreferences.setLongitude(this, currentLocation.getLongitude());
+        MPSPreferences.setAccuracy(this, currentLocation.getAccuracy());
+
+        //Get current time and date and store it in MPSPreferences
+        DateAndTime dateAndTime = new DateAndTime();
+        MPSPreferences.setCurrentDate(this, dateAndTime.getCurrentDate());
+        MPSPreferences.setCurrentTime(this, dateAndTime.getCurrentTime());
     }
 
     @Override
@@ -89,18 +106,5 @@ public class MainActivity extends Activity {
     private void dropPinInMaps(String latitude, String longitude, String labelName){
         Intent dropPinIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="+latitude+","+longitude+"("+labelName+")"));
         startActivity(dropPinIntent);
-    }
-
-    private void getCurrentLocationTimeDate(){
-        //Get current location and store it in MPSPreferences
-        CurrentLocation currentLocation = new CurrentLocation(this);
-        MPSPreferences.setLatitude(this, currentLocation.getLatitude());
-        MPSPreferences.setLongitude(this, currentLocation.getLongitude());
-        MPSPreferences.setAccuracy(this, currentLocation.getAccuracy());
-
-        //Get current time and date and store it in MPSPreferences
-        DateAndTime dateAndTime = new DateAndTime();
-        MPSPreferences.setCurrentDate(this, dateAndTime.getCurrentDate());
-        MPSPreferences.setCurrentTime(this, dateAndTime.getCurrentTime());
     }
 }
