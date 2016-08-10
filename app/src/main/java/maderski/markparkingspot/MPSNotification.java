@@ -21,17 +21,19 @@ public class MPSNotification {
     public void createMessage(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
 
-        String title = "Click to launch ";
-        String message = "Time: " + MPSPreferences.getCurrentTime(context) +
-                " Date: " + MPSPreferences.getCurrentDate(context);
         String pinLabel = "Parking Spot";
         String latitude = MPSPreferences.getLatitude(context);
         String longitude = MPSPreferences.getLongitude(context);
+        String latitudeShort = shortenString(latitude, 5);
+        String longitudeShort = shortenString(longitude, 5);
+
+        String title = "Location: " + latitudeShort + ", " +
+                longitudeShort;
+        String message = "Time: " + MPSPreferences.getCurrentTime(context) +
+                " Date: " + MPSPreferences.getCurrentDate(context);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        //PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
-        //        new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(context, Options.class), PendingIntent.FLAG_UPDATE_CURRENT);
         Intent dropPinIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("geo:0,0?q="+ latitude+","+ longitude+"("+ pinLabel+")"));
         dropPinIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -43,12 +45,13 @@ public class MPSNotification {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(false)
+                .setAutoCancel(OptionsPreferences.getAutoCancel(context))
+                .setOngoing(OptionsPreferences.getOngoing(context))
                 .setContentIntent(mapIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-        //.addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
-                .addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .addAction(android.R.drawable.ic_menu_edit, "Options", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
     }
 
@@ -61,5 +64,12 @@ public class MPSNotification {
         }catch(Exception e){
             Log.e(nTAG, e.getMessage());
         }
+    }
+
+    private String shortenString(String inputString, int maxLength){
+        if(inputString.length() > maxLength)
+            return inputString.substring(0, maxLength);
+        else
+            return inputString;
     }
 }
