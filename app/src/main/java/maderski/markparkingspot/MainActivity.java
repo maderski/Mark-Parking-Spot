@@ -7,16 +7,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -42,25 +34,37 @@ public class MainActivity extends Activity {
     private void performActions(){
         CurrentLocation currentLocation = new CurrentLocation(this);
         if(currentLocation.isGPSEnabled()) {
-            getCurrentLocationTimeDate(currentLocation);
-
-            MPSNotification notification = new MPSNotification();
-            notification.createMessage(this);
+            if(getCurrentLocationTimeDate(currentLocation)){
+                createMessage();
+            }else{
+                Toast.makeText(this, "Unable to get GPS fix, Please try again", Toast.LENGTH_LONG).show();
+            }
         }else{
             Toast.makeText(this, "The GPS is currently disabled!", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void getCurrentLocationTimeDate(CurrentLocation currentLocation){
+    private void createMessage(){
+        MPSNotification notification = new MPSNotification();
+        notification.createMessage(this);
+    }
+
+    private boolean getCurrentLocationTimeDate(CurrentLocation currentLocation){
         //Get current location and store it in MPSPreferences
         MPSPreferences.setLatitude(this, currentLocation.getLatitude());
         MPSPreferences.setLongitude(this, currentLocation.getLongitude());
         MPSPreferences.setAccuracy(this, currentLocation.getAccuracy());
 
+        if(currentLocation.getAccuracy().equals("unknown")) {
+            return false;
+        }
+
         //Get current time and date and store it in MPSPreferences
         DateAndTime dateAndTime = new DateAndTime();
         MPSPreferences.setCurrentDate(this, dateAndTime.getCurrentDate());
         MPSPreferences.setCurrentTime(this, dateAndTime.getCurrentTime());
+
+        return true;
     }
 
     @Override
@@ -71,7 +75,6 @@ public class MainActivity extends Activity {
                 performActions();
             }
         }
-
     }
 
     private boolean hasLocationPermission() {
