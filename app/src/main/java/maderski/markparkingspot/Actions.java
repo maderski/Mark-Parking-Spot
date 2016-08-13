@@ -21,10 +21,15 @@ public class Actions {
 
     public void checkIfCanGetLocation(){
         boolean enabled = MPSPreferences.CanGetNewLocation(context);
-        if(enabled)
-            getCurrentLocation(30);
-        else
-            createMessage();
+        boolean gpsIsOn = locationManager.isGPSEnabled();
+        if(gpsIsOn) {
+            if (enabled)
+                getCurrentLocation(30);
+            else
+                createMessage();
+        }else{
+            Toast.makeText(context, "The GPS is currently disabled!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public boolean getCurrentLocation(final int seconds){
@@ -77,7 +82,7 @@ public class Actions {
             if(getCurrentLocationTimeDate()){
                 createMessage();
             }else{
-                Toast.makeText(context, "Unable to get good GPS fix, Poor Accuracy! Please try again",
+                Toast.makeText(context, "Unable to get good GPS fix! Please try again",
                         Toast.LENGTH_LONG).show();
             }
         }else{
