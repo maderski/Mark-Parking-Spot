@@ -34,13 +34,21 @@ public class Actions {
         locationManager.startLocationListener();
 
         new CountDownTimer(milliseconds, 1000){
-            int start = 1;
-            String finish = Integer.toString(seconds) + "sec";
+            int start = 0;
+            String workingMessage = "Working";
+            String dot = ".";
             @Override
             public void onTick(long l) {
                 location = locationManager.getLocation();
                 if(location == null){
-                    Toast.makeText(ctx, "Working..." + Integer.toString(start) + " of " + finish
+                    if(start < 6 && start > 0) {
+                        workingMessage += dot;
+                    }
+                    else {
+                        workingMessage = "Working";
+                        start = 1;
+                    }
+                    Toast.makeText(ctx, workingMessage
                             ,Toast.LENGTH_SHORT).show();
                     start++;
                 }
