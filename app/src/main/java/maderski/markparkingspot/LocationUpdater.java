@@ -8,9 +8,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
-
-import java.security.Provider;
 
 /**
  * Created by Jason on 8/11/16.

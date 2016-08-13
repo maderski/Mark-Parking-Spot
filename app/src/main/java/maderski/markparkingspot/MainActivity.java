@@ -5,9 +5,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
-
-import java.security.Permission;
 
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getName();

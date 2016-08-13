@@ -3,7 +3,7 @@ package maderski.markparkingspot;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+
 
 /**
  * Created by Jason on 8/13/16.
