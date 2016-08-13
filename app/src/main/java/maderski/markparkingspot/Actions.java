@@ -19,19 +19,30 @@ public class Actions {
         locationManager = new LocationManager(context);
     }
 
-    public boolean getCurrentLocation(int seconds){
+    public void checkIfCanGetLocation(){
+        boolean enabled = MPSPreferences.CanGetNewLocation(context);
+        if(enabled)
+            getCurrentLocation(30);
+        else
+            createMessage();
+    }
+
+    public boolean getCurrentLocation(final int seconds){
         final Context ctx = this.context;
         int milliseconds = seconds * 1000;
 
         locationManager.startLocationListener();
 
         new CountDownTimer(milliseconds, 1000){
-
+            int start = 1;
+            String finish = Integer.toString(seconds) + "sec";
             @Override
             public void onTick(long l) {
                 location = locationManager.getLocation();
                 if(location == null){
-                    Toast.makeText(ctx, "Working...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Working..." + Integer.toString(start) + " of " + finish
+                            ,Toast.LENGTH_SHORT).show();
+                    start++;
                 }
 
                 if(location != null) {
@@ -58,7 +69,8 @@ public class Actions {
             if(getCurrentLocationTimeDate()){
                 createMessage();
             }else{
-                Toast.makeText(context, "Unable to get good GPS fix, Please try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Unable to get good GPS fix, Poor Accuracy! Please try again",
+                        Toast.LENGTH_LONG).show();
             }
         }else{
             Toast.makeText(context, "The GPS is currently disabled!", Toast.LENGTH_LONG).show();

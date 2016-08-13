@@ -34,10 +34,12 @@ public class MPSNotification {
         String title = "Captured! w/Accuracy: " + accuracy + "m";
         String message = "at " + MPSPreferences.getCurrentTime(context) +
                 " on " + MPSPreferences.getCurrentDate(context);
+        String actionText = setActionButtonText();
 
         PendingIntent pendingIntent = dropPinPendingIntent(latitude, longitude, pinLabel);
+        PendingIntent canGetLocationIntent = setCanGetLocationIntent();
 
-        buildNotification(title, message, pendingIntent, color);
+        buildNotification(title, message, pendingIntent, canGetLocationIntent, actionText,color);
     }
 
     //Create pending Intent for notification
@@ -48,8 +50,27 @@ public class MPSNotification {
         return PendingIntent.getActivity(context, 0, dropPinIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    //Create CanGetNewLocation Pending Intent
+    private PendingIntent setCanGetLocationIntent(){
+        Intent intent = new Intent(context, GetNewLocationSetter.class);
+
+        return PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    //Set Action Button Text
+    private String setActionButtonText(){
+        boolean enabled = MPSPreferences.CanGetNewLocation(context);
+
+        if(enabled)
+            return "Get new location: ON";
+        else
+            return "Get new location: OFF";
+
+    }
+
     //Build notification message
-    private void buildNotification(String title, String message, PendingIntent pendingIntent, int color){
+    private void buildNotification(String title, String message, PendingIntent pendingIntent,
+                                   PendingIntent canGetLocationIntent,String actionText, int color){
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -61,6 +82,7 @@ public class MPSNotification {
                 .setContentIntent(pendingIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
+                .addAction(android.R.drawable.ic_menu_edit, actionText, canGetLocationIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE);
         nManager.notify(nTAG, nID, builder.build());
     }

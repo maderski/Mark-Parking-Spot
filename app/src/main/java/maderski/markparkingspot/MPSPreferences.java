@@ -16,6 +16,7 @@ public class MPSPreferences {
     private static final String ACCURACY_KEY = "AccuracyKey";
     private static final String CURRENT_TIME_KEY = "CurrentTimeKey";
     private static final String CURRENT_DATE_KEY = "CurrentDateKey";
+    private static final String CAN_GET_NEW_LOCATION = "CanGetNewLocation";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -38,6 +39,15 @@ public class MPSPreferences {
     private static void commit(Context context){
         editor(context).commit();
         _editor = null;
+    }
+
+    public static void setCanGetNewLocation(Context context, boolean enabled){
+        editor(context).putBoolean(CAN_GET_NEW_LOCATION, enabled);
+        commit(context);
+    }
+
+    public static boolean CanGetNewLocation(Context context){
+        return reader(context).getBoolean(CAN_GET_NEW_LOCATION, true);
     }
 
     public static void setLatitude(Context context, String latitude){

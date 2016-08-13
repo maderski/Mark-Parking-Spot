@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if(hasLocationPermission()) {
             Actions actions = new Actions(this);
-            actions.getCurrentLocation(60);
+            actions.checkIfCanGetLocation();
             finish();
         }
     }
