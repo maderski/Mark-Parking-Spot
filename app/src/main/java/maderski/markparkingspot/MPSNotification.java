@@ -76,7 +76,7 @@ public class MPSNotification {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_car)
                 .setAutoCancel(true)
                 .setOngoing(false)
                 .setContentIntent(pendingIntent)
