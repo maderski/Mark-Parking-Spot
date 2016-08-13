@@ -82,7 +82,7 @@ public class MPSNotification {
                 .setContentIntent(pendingIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(android.R.drawable.ic_menu_edit, actionText, canGetLocationIntent)
+                .addAction(R.drawable.ic_map_pin, actionText, canGetLocationIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE);
         nManager.notify(nTAG, nID, builder.build());
     }
