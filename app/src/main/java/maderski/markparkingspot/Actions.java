@@ -26,7 +26,7 @@ public class Actions {
             if (enabled)
                 getCurrentLocation(30);
             else
-                createMessage();
+                createMessage(true);
         }else{
             Toast.makeText(context, "The GPS is currently disabled!", Toast.LENGTH_LONG).show();
         }
@@ -80,7 +80,7 @@ public class Actions {
     private void performActions(){
         if(locationManager.isGPSEnabled()) {
             if(getCurrentLocationTimeDate()){
-                createMessage();
+                createMessage(false);
             }else{
                 Toast.makeText(context, "Unable to get good GPS fix! Please try again",
                         Toast.LENGTH_LONG).show();
@@ -90,9 +90,9 @@ public class Actions {
         }
     }
 
-    private void createMessage(){
+    private void createMessage(boolean isAnUpdate){
         MPSNotification notification = new MPSNotification(context);
-        notification.createMessage();
+        notification.createMessage(isAnUpdate);
     }
 
     private boolean getCurrentLocationTimeDate(){

@@ -23,23 +23,26 @@ public class MPSNotification {
     }
 
     //Create notification message
-    public void createMessage(){
-        int color = ContextCompat.getColor(context, R.color.colorAccent);
+    public void createMessage(boolean isAnUpdate){
+        boolean enabled = MPSPreferences.CanGetNewLocation(context);
 
         String pinLabel = "Parking Spot";
         String latitude = MPSPreferences.getLatitude(context);
         String longitude = MPSPreferences.getLongitude(context);
         String accuracy = MPSPreferences.getAccuracy(context);
 
-        String title = "Captured! w/Accuracy: " + accuracy + "m";
+        String title = setTitleText(enabled, isAnUpdate) + accuracy + "m";
         String message = "at " + MPSPreferences.getCurrentTime(context) +
                 " on " + MPSPreferences.getCurrentDate(context);
-        String actionText = setActionButtonText();
+        String actionText = setActionButtonText(enabled);
+
+        int color = ContextCompat.getColor(context, R.color.colorAccent);
+        int actionIcon = setActionButtonIcon(enabled);
 
         PendingIntent pendingIntent = dropPinPendingIntent(latitude, longitude, pinLabel);
         PendingIntent canGetLocationIntent = setCanGetLocationIntent();
 
-        buildNotification(title, message, pendingIntent, canGetLocationIntent, actionText,color);
+        buildNotification(title, message, pendingIntent, canGetLocationIntent, actionText, color, actionIcon);
     }
 
     //Create pending Intent for notification
@@ -58,9 +61,7 @@ public class MPSNotification {
     }
 
     //Set Action Button Text
-    private String setActionButtonText(){
-        boolean enabled = MPSPreferences.CanGetNewLocation(context);
-
+    private String setActionButtonText(boolean enabled){
         if(enabled)
             return "Get new location: ON";
         else
@@ -68,9 +69,23 @@ public class MPSNotification {
 
     }
 
+    private int setActionButtonIcon(boolean enabled){
+        if(enabled)
+            return R.drawable.ic_map_pin;
+        else
+            return android.R.drawable.ic_menu_close_clear_cancel;
+    }
+
+    private String setTitleText(boolean enabled, boolean isAnUpdate){
+        if(enabled && !isAnUpdate)
+            return "Captured! w/Accuracy: ";
+        else
+            return "Drop pin w/Accuracy: ";
+    }
+
     //Build notification message
     private void buildNotification(String title, String message, PendingIntent pendingIntent,
-                                   PendingIntent canGetLocationIntent,String actionText, int color){
+                                   PendingIntent canGetLocationIntent,String actionText, int color, int actionIcon){
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -82,7 +97,7 @@ public class MPSNotification {
                 .setContentIntent(pendingIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(R.drawable.ic_map_pin, actionText, canGetLocationIntent)
+                .addAction(actionIcon, actionText, canGetLocationIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE);
         nManager.notify(nTAG, nID, builder.build());
     }

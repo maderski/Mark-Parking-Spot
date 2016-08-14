@@ -21,7 +21,7 @@ public class GetNewLocationSetter extends Activity{
         if(BuildConfig.DEBUG)
             Log.i("GNLS:::", Boolean.toString(MPSPreferences.CanGetNewLocation(this)));
         MPSNotification notification = new MPSNotification(this);
-        notification.createMessage();
+        notification.createMessage(true);
         finish();
     }
 }
