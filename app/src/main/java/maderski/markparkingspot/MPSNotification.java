@@ -18,12 +18,28 @@ public class MPSNotification {
 
     private Context context;
 
+    private NotificationManager nManager;
+    private NotificationCompat.Builder builder;
+
+    private String title;
+    private String message;
+    private PendingIntent pendingIntent;
+    private PendingIntent canGetLocationIntent;
+    private String actionText;
+
+    private int color;
+    private int actionIcon;
+
+
     public MPSNotification(Context context){
         this.context = context;
+        this.nManager = (NotificationManager)context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        this.builder = new NotificationCompat.Builder(context);
     }
 
     //Create notification message
-    public void createMessage(boolean isAnUpdate){
+    public void createMessage(boolean isAnUpdate, boolean isAButtonPress){
         boolean enabled = MPSPreferences.CanGetNewLocation(context);
 
         String pinLabel = "Parking Spot";
@@ -31,18 +47,21 @@ public class MPSNotification {
         String longitude = MPSPreferences.getLongitude(context);
         String accuracy = MPSPreferences.getAccuracy(context);
 
-        String title = setTitleText(enabled, isAnUpdate) + accuracy + "m";
-        String message = "at " + MPSPreferences.getCurrentTime(context) +
+        title = setTitleText(enabled, isAnUpdate) + accuracy + "m";
+        message = "at " + MPSPreferences.getCurrentTime(context) +
                 " on " + MPSPreferences.getCurrentDate(context);
-        String actionText = setActionButtonText(enabled);
+        actionText = setActionButtonText(enabled);
 
-        int color = ContextCompat.getColor(context, R.color.colorAccent);
-        int actionIcon = setActionButtonIcon(enabled);
+        color = ContextCompat.getColor(context, R.color.colorAccent);
+        actionIcon = setActionButtonIcon(enabled);
 
-        PendingIntent pendingIntent = dropPinPendingIntent(latitude, longitude, pinLabel);
-        PendingIntent canGetLocationIntent = setCanGetLocationIntent();
+        pendingIntent = dropPinPendingIntent(latitude, longitude, pinLabel);
+        canGetLocationIntent = setCanGetLocationIntent();
 
-        buildNotification(title, message, pendingIntent, canGetLocationIntent, actionText, color, actionIcon);
+        if(isAButtonPress)
+            buildNoVibrateNotification();
+        else
+            buildNotification();
     }
 
     //Create pending Intent for notification
@@ -84,12 +103,8 @@ public class MPSNotification {
     }
 
     //Build notification message
-    private void buildNotification(String title, String message, PendingIntent pendingIntent,
-                                   PendingIntent canGetLocationIntent,String actionText, int color, int actionIcon){
-        NotificationManager nManager = (NotificationManager)context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle(title)
+    private void buildNotification(){
+        builder.setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_car)
                 .setAutoCancel(true)
@@ -99,6 +114,19 @@ public class MPSNotification {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .addAction(actionIcon, actionText, canGetLocationIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE);
+        nManager.notify(nTAG, nID, builder.build());
+    }
+
+    private void buildNoVibrateNotification(){
+        builder.setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_car)
+                .setAutoCancel(true)
+                .setOngoing(false)
+                .setContentIntent(pendingIntent)
+                .setColor(color)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .addAction(actionIcon, actionText, canGetLocationIntent);
         nManager.notify(nTAG, nID, builder.build());
     }
 }

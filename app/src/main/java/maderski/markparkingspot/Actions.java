@@ -92,7 +92,7 @@ public class Actions {
 
     private void createMessage(boolean isAnUpdate){
         MPSNotification notification = new MPSNotification(context);
-        notification.createMessage(isAnUpdate);
+        notification.createMessage(isAnUpdate, false);
     }
 
     private boolean getCurrentLocationTimeDate(){

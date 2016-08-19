@@ -3,6 +3,7 @@ package maderski.markparkingspot;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 
 /**
@@ -14,14 +15,17 @@ public class GetNewLocationSetter extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         boolean enabled = MPSPreferences.CanGetNewLocation(this);
-        if(enabled)
+        if(enabled) {
             MPSPreferences.setCanGetNewLocation(this, false);
-        else
+            Toast.makeText(this, "Location SAVED!", Toast.LENGTH_SHORT).show();
+        }
+        else {
             MPSPreferences.setCanGetNewLocation(this, true);
+        }
         if(BuildConfig.DEBUG)
             Log.i("GNLS:::", Boolean.toString(MPSPreferences.CanGetNewLocation(this)));
         MPSNotification notification = new MPSNotification(this);
-        notification.createMessage(true);
+        notification.createMessage(true, true);
         finish();
     }
 }
