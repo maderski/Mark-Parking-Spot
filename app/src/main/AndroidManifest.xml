@@ -20,8 +20,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GetNewLocationSetter"
+        <activity
+            android:name=".GetNewLocationSetter"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+        <activity
+            android:name=".DropPreviousPinActivity"
+            android:label="Parking Spot Previous"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:icon="@mipmap/ic_blue_car"
+            android:taskAffinity="maderski.markparkingspot.DropPreviousPinActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
