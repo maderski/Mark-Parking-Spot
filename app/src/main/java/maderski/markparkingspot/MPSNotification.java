@@ -42,7 +42,7 @@ public class MPSNotification {
     public void createMessage(boolean isAnUpdate, boolean isAButtonPress){
         boolean enabled = MPSPreferences.CanGetNewLocation(context);
 
-        String pinLabel = "Parking Spot";
+        String pinLabel = "Parking Spot " + MPSPreferences.getCurrentDate(context);
         String latitude = MPSPreferences.getLatitude(context);
         String longitude = MPSPreferences.getLongitude(context);
         String accuracy = MPSPreferences.getAccuracy(context);
