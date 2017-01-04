@@ -47,7 +47,7 @@ public class MPSNotification {
         String longitude = MPSPreferences.getLongitude(context);
         String accuracy = MPSPreferences.getAccuracy(context);
 
-        title = setTitleText(enabled, isAnUpdate) + accuracy + "m";
+        title = setTitleText(enabled, isAnUpdate) + accuracy + "ft";
         message = "at " + MPSPreferences.getCurrentTime(context) +
                 " on " + MPSPreferences.getCurrentDate(context);
         actionText = setActionButtonText(enabled);

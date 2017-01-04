@@ -27,13 +27,16 @@ public class MainActivity extends Activity {
 
     private boolean hasLocationPermission() {
         PackageManager packageManager = getPackageManager();
-        int hasPermission = packageManager.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+        int hasGPSPermission = packageManager.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                getPackageName());
+        int hasNetworkPermission = packageManager.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
                 getPackageName());
         //Check if Permission is granted
-        if(hasPermission != PackageManager.PERMISSION_GRANTED){
+        if(hasGPSPermission != PackageManager.PERMISSION_GRANTED && hasNetworkPermission != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(
                     this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PackageManager.PERMISSION_GRANTED);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PackageManager.PERMISSION_GRANTED);
             return false;
         }else{
             return true;

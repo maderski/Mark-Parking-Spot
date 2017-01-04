@@ -12,7 +12,7 @@ public class Actions {
 
     Context context;
     LocationManager locationManager;
-    Location location;
+    boolean triedAgain = false;
 
     public Actions(Context context){
         this.context = context;
@@ -21,10 +21,10 @@ public class Actions {
 
     public void checkIfCanGetLocation(){
         boolean enabled = MPSPreferences.CanGetNewLocation(context);
-        boolean gpsIsOn = locationManager.isGPSEnabled();
+        boolean gpsIsOn = locationManager.isGPSAndNetworkEnabled();
         if(gpsIsOn) {
             if (enabled)
-                getCurrentLocation(30);
+                getCurrentLocation(15);
             else
                 createMessage(true);
         }else{
@@ -32,58 +32,56 @@ public class Actions {
         }
     }
 
-    public boolean getCurrentLocation(final int seconds){
+    public void getCurrentLocation(final int seconds){
         final Context ctx = this.context;
         int milliseconds = seconds * 1000;
 
-        locationManager.startLocationListener();
+        locationManager.startLocationListener(context);
 
         new CountDownTimer(milliseconds, 1000){
             int start = 0;
+            int countSeconds = 1;
             String workingMessage = "Working";
             String dot = ".";
             @Override
             public void onTick(long l) {
-                location = locationManager.getLocation();
-                if(location == null){
-                    if(start < 6 && start > 0) {
-                        workingMessage += dot;
-                    }
-                    else {
-                        workingMessage = "Working";
-                        start = 1;
-                    }
-                    Toast.makeText(ctx, workingMessage
-                            ,Toast.LENGTH_SHORT).show();
-                    start++;
+                if(start < 6 && start > 0) {
+                    workingMessage += dot;
+                }
+                else {
+                    workingMessage = "Working";
+                    start = 1;
                 }
 
-                if(location != null) {
-                    locationManager.stopLocationListener();
-                    performActions();
-                    cancel();
-                }
+                if(countSeconds < (seconds - 7))
+                    Toast.makeText(ctx, workingMessage,Toast.LENGTH_SHORT).show();
+                start++;
+                countSeconds++;
             }
 
             @Override
             public void onFinish() {
-                locationManager.stopLocationListener();
+                locationManager.stopLocationListener(context);
+                locationManager.getBestLocation(context);
+                performActions();
             }
         }.start();
-
-        if(location != null)
-            return true;
-        else
-            return false;
     }
 
     private void performActions(){
-        if(locationManager.isGPSEnabled()) {
+        if(locationManager.isGPSAndNetworkEnabled()) {
             if(getCurrentLocationTimeDate()){
                 createMessage(false);
             }else{
+                if(triedAgain){
                 Toast.makeText(context, "Unable to get good GPS fix! Please try again",
                         Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(context, "Unable to get good GPS fix! Trying one more time",
+                            Toast.LENGTH_LONG).show();
+                    triedAgain = true;
+                    getCurrentLocation(15);
+                }
             }
         }else{
             Toast.makeText(context, "The GPS is currently disabled!", Toast.LENGTH_LONG).show();
@@ -99,13 +97,13 @@ public class Actions {
         //Get current location and store it in MPSPreferences
         MPSPreferences.setLatitude(context, locationManager.getLatitude());
         MPSPreferences.setLongitude(context, locationManager.getLongitude());
-        MPSPreferences.setAccuracy(context, locationManager.getAccuracy());
+        MPSPreferences.setAccuracy(context, locationManager.getAccuracyAsString());
 
-        if(locationManager.getAccuracy().equals("unknown")) {
+        if(locationManager.getAccuracyAsString().equals("unknown")) {
             return false;
         }
 
-        if(locationManager.isAccuracyPoor()){
+        if(locationManager.isAccuracyPoor(locationManager.getLocationResult())){
             return false;
         }
 
