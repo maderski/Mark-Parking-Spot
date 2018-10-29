@@ -15,9 +15,9 @@ class Actions(private val context: Context) {
     private var toast: Toast? = null
 
     /**
-        Get current location and store it in MPSPreferences
-        Get current time and date and store it in MPSPreferences
-    */
+    Get current location and store it in MPSPreferences
+    Get current time and date and store it in MPSPreferences
+     */
     private val currentLocationTimeDate: Boolean
         get() {
             MPSPreferences.setLatitude(context, locationManager.latitude)
@@ -28,9 +28,12 @@ class Actions(private val context: Context) {
                 return false
             }
 
-            if (locationManager.isAccuracyPoor(locationManager.locationResult)) {
-                return false
+            locationManager.locationResult?.let {
+                if (locationManager.isAccuracyPoor(it)) {
+                    return false
+                }
             }
+
             val dateAndTime = DateAndTime()
             MPSPreferences.setCurrentDate(context, dateAndTime.currentDate)
             MPSPreferences.setCurrentTime(context, dateAndTime.currentTime)
@@ -39,7 +42,7 @@ class Actions(private val context: Context) {
         }
 
     fun checkIfCanGetLocation() {
-        val enabled = MPSPreferences.CanGetNewLocation(context)
+        val enabled = MPSPreferences.canGetNewLocation(context)
         val gpsIsOn = locationManager.isGPSAndNetworkEnabled
         if (gpsIsOn) {
             if (enabled)
