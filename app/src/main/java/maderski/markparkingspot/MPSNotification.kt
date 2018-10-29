@@ -27,7 +27,7 @@ class MPSNotification(private val context: Context) {
 
 
     //Create notification message
-    fun createMessage(isAnUpdate: Boolean, isAButtonPress: Boolean) {
+    fun createMessage(isAnUpdate: Boolean) {
         val enabled = MPSPreferences.canGetNewLocation(context)
 
         val pinLabel = "Parking Spot " + MPSPreferences.getCurrentDate(context)
@@ -41,7 +41,7 @@ class MPSNotification(private val context: Context) {
         color = ContextCompat.getColor(context, R.color.colorAccent)
         pendingIntent = dropPinPendingIntent(latitude, longitude, pinLabel)
 
-        buildNotification(isAButtonPress)
+        buildNotification()
     }
 
     //Create pending Intent for notification
@@ -60,7 +60,7 @@ class MPSNotification(private val context: Context) {
     }
 
     //Build notification message
-    private fun buildNotification(hasVibration: Boolean) {
+    private fun buildNotification() {
         val builder = if (Build.VERSION.SDK_INT < 26) {
             NotificationCompat.Builder(context)
         } else {
@@ -75,11 +75,10 @@ class MPSNotification(private val context: Context) {
                 .setAutoCancel(true)
                 .setOngoing(false)
                 .setContentIntent(pendingIntent)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setColor(color)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-        if (hasVibration) {
-            builder.setDefaults(Notification.DEFAULT_VIBRATE)
-        }
+                .priority = NotificationCompat.PRIORITY_DEFAULT
+
         notificationManager.notify(nTAG, nID, builder.build())
     }
 

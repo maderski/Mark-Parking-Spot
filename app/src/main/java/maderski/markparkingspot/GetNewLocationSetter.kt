@@ -23,7 +23,7 @@ class GetNewLocationSetter : Activity() {
         if (BuildConfig.DEBUG)
             Log.i("GNLS:::", java.lang.Boolean.toString(MPSPreferences.canGetNewLocation(this)))
         val notification = MPSNotification(this)
-        notification.createMessage(true, true)
+        notification.createMessage(true)
         finish()
     }
 }

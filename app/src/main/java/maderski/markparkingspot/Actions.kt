@@ -73,7 +73,7 @@ class Actions(private val context: Context) {
                     start = 1
                 }
 
-                if (countSeconds < seconds - 7) {
+                if (countSeconds < seconds) {
                     toast?.let {
                         if (it.view.isShown) {
                             it.cancel()
@@ -88,6 +88,7 @@ class Actions(private val context: Context) {
             }
 
             override fun onFinish() {
+                Toast.makeText(context, context.getString(R.string.location_found), Toast.LENGTH_LONG).show()
                 locationManager.stopLocationListener(context)
                 locationManager.getBestLocation(context)
                 performActions()
@@ -117,6 +118,6 @@ class Actions(private val context: Context) {
 
     private fun createMessage(isAnUpdate: Boolean) {
         val notification = MPSNotification(context)
-        notification.createMessage(isAnUpdate, false)
+        notification.createMessage(isAnUpdate)
     }
 }

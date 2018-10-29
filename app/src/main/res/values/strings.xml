@@ -4,4 +4,5 @@
     <string name="captured_with_accuracy">Captured! w/Accuracy:</string>
     <string name="get_new_location_on">Get new location: ON</string>
     <string name="get_new_location_off">Get new location: OFF</string>
+    <string name="location_found">Location FOUND!</string>
 </resources>
