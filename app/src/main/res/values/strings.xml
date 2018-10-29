@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Parking Spot Pindrop</string>
+    <string name="drop_pin_with_accuracy">Drop pin w/Accuracy:</string>
+    <string name="captured_with_accuracy">Captured! w/Accuracy:</string>
+    <string name="get_new_location_on">Get new location: ON</string>
+    <string name="get_new_location_off">Get new location: OFF</string>
 </resources>

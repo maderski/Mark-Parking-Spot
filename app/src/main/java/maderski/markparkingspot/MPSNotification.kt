@@ -23,11 +23,7 @@ class MPSNotification(private val context: Context) {
     private var title: String? = null
     private var message: String? = null
     private var pendingIntent: PendingIntent? = null
-    private var canGetLocationIntent: PendingIntent? = null
-    private var actionText: String? = null
-
     private var color: Int = 0
-    private var actionIcon: Int = 0
 
 
     //Create notification message
@@ -42,13 +38,8 @@ class MPSNotification(private val context: Context) {
         title = setTitleText(enabled, isAnUpdate) + accuracy + "ft"
         message = "at " + MPSPreferences.getCurrentTime(context) +
                 " on " + MPSPreferences.getCurrentDate(context)
-        actionText = setActionButtonText(enabled)
-
         color = ContextCompat.getColor(context, R.color.colorAccent)
-        actionIcon = setActionButtonIcon(enabled)
-
         pendingIntent = dropPinPendingIntent(latitude, longitude, pinLabel)
-        canGetLocationIntent = setCanGetLocationIntent()
 
         buildNotification(isAButtonPress)
     }
@@ -61,34 +52,11 @@ class MPSNotification(private val context: Context) {
         return PendingIntent.getActivity(context, 0, dropPinIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    //Create canGetNewLocation Pending Intent
-    private fun setCanGetLocationIntent(): PendingIntent {
-        val intent = Intent(context, GetNewLocationSetter::class.java)
-
-        return PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
-
-    //Set Action Button Text
-    private fun setActionButtonText(enabled: Boolean): String {
-        return if (enabled)
-            "Get new location: ON"
-        else
-            "Get new location: OFF"
-
-    }
-
-    private fun setActionButtonIcon(enabled: Boolean): Int {
-        return if (enabled)
-            R.drawable.ic_map_pin
-        else
-            android.R.drawable.ic_menu_close_clear_cancel
-    }
-
     private fun setTitleText(enabled: Boolean, isAnUpdate: Boolean): String {
         return if (enabled && !isAnUpdate)
-            "Captured! w/Accuracy: "
+            context.getString(R.string.captured_with_accuracy)
         else
-            "Drop pin w/Accuracy: "
+            context.getString(R.string.drop_pin_with_accuracy)
     }
 
     //Build notification message
@@ -108,8 +76,7 @@ class MPSNotification(private val context: Context) {
                 .setOngoing(false)
                 .setContentIntent(pendingIntent)
                 .setColor(color)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(actionIcon, actionText, canGetLocationIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
         if (hasVibration) {
             builder.setDefaults(Notification.DEFAULT_VIBRATE)
         }

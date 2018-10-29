@@ -66,7 +66,7 @@ class LocationManager(context: Context) : LocationUpdater(context) {
                     var accuracy = "unknown"
                     locationResult?.let {
                         val locationToFeet = it.accuracy * 3.28
-                        accuracy = locationToFeet.toString()
+                        accuracy = "%.2f".format(locationToFeet)
                     }
                     accuracy
                 } else {
